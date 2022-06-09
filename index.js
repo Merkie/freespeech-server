@@ -8,7 +8,7 @@ const Layout = require("./schema/Layout");
 
 const app = express();
 
-app.listen(5000, () => {
+app.listen(port, () => {
 	console.log("Server has started!");
 });
 
@@ -16,7 +16,7 @@ mongoose.connect(secret.mongourl).then(() => {
 	console.log("Connected to MongoDB!");
 });
 
-app.post("/user", (req, res) => {
+app.get("/user", (req, res) => {
     const json = req.body;
     res.send("Hello World!");
 });
