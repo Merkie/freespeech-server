@@ -16,8 +16,7 @@ mongoose.connect(secret.mongourl).then(() => {
 	console.log("Connected to MongoDB!");
 });
 
-app.get("/user", (req, res) => {
-    const json = req.body;
+app.get("/", (req, res) => {
     res.send("Hello World!");
 });
 
