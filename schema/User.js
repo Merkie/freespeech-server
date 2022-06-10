@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
         trim: true,
         validate: {
             validator: function(value) {
-                return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value);
+                return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,10})+$/.test(value);
             }
         }
     },

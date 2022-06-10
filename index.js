@@ -15,6 +15,29 @@ app.listen(port, () => {
 	console.log("Server has started!");
 });
 
+// Signup
+app.post("/signup", async (req, res) => {
+	const json = req.body;
+
+	const new_layout = new Layout({
+		name: "My First Layout",
+		icon: "https://uploads.dailydot.com/2018/10/olli-the-polite-cat.jpg?auto=compress&fit=scale&fm=pjpg&h=350&w=700",
+	});
+
+	const user = new User({
+		name: json.name,
+		email: json.email,
+		layouts: [new_layout._id],
+	});
+	
+	new_layout.owner = user._id;
+
+	await new_layout.save();
+	await new_user.save();
+});
+
+
+
 mongoose.connect(secret.mongourl).then(() => {
 	console.log("Connected to MongoDB!");
 });
@@ -23,20 +46,8 @@ app.get("/", (req, res) => {
     res.send("Hello World!");
 });
 
-const new_layout = new Layout({
-	name: "My First Layout",
-	icon: "https://uploads.dailydot.com/2018/10/olli-the-polite-cat.jpg?auto=compress&fit=scale&fm=pjpg&h=350&w=700",
-});
-
-const new_user = new User({
-	name: "Archer Calder",
-	email: "archercalder@gmail.com",
-	layouts: [new_layout._id],
-});
-
 async function run() {
-	await new_layout.save();
-	await new_user.save();
+	
 
 	console.log(new_layout);
 	console.log("\n");

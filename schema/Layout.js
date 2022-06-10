@@ -15,6 +15,9 @@ const layoutSchema = new mongoose.Schema({
     data: {
         type: Object,
         default: {"Home":[]}
+    },
+    owner: {
+        type: mongoose.SchemaTypes.ObjectId
     }
 });
 
