@@ -25,7 +25,7 @@ function hashPassword(password) {
 	
     
 	
-    // var hash = crypto.pbkdf2(password, salt, iterations);
+    var hash = crypto.pbkdf2(password, salt, iterations);
 
     // return {
     //     salt: salt,
