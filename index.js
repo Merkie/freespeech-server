@@ -18,40 +18,41 @@ app.listen(port, () => {
 
 // Signup
 app.post("/signup", async (req, res) => {
-	const json = req.body;
+	try {
+		const json = req.body;
 
-	console.log(json);
+		const new_layout = new Layout({
+			name: "My First Layout",
+			icon: "https://uploads.dailydot.com/2018/10/olli-the-polite-cat.jpg?auto=compress&fit=scale&fm=pjpg&h=350&w=700",
+		});
 
-	// const new_layout = new Layout({
-	// 	name: "My First Layout",
-	// 	icon: "https://uploads.dailydot.com/2018/10/olli-the-polite-cat.jpg?auto=compress&fit=scale&fm=pjpg&h=350&w=700",
-	// });
+		const user = new User({
+			name: json["name"],
+			email: json["email"],
+			layouts: [new_layout._id],
+		});
 
-	// const user = new User({
-	// 	name: json["name"],
-	// 	email: json["email"],
-	// 	layouts: [new_layout._id],
-	// });
+		new_layout.owner = user._id;
 
-	// new_layout.owner = user._id;
-
-	// await new_layout.save();
-	// await new_user.save();
+		await new_layout.save();
+		await new_user.save();
+		
+		res.send({"success": true});
+	} catch (err) {
+		console.log(err);
+		res.status(500).send(err);
+	}
 });
-
-
 
 mongoose.connect(secret.mongourl).then(() => {
 	console.log("Connected to MongoDB!");
 });
 
 app.get("/", (req, res) => {
-    res.send("Hello World!");
+	res.send("Hello World!");
 });
 
 async function run() {
-	
-
 	console.log(new_layout);
 	console.log("\n");
 	console.log(new_user);
