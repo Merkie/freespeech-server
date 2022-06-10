@@ -3,6 +3,7 @@ const express = require("express");
 const https = require("https");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const cors = require("cors");
 const secret = require("./secret");
 
 // Schemas
@@ -12,6 +13,9 @@ const Layout = require("./schema/Layout");
 // Express app
 const app = express();
 app.use(express.json());
+app.use(cors({
+	origin: "http://159.223.200.254:3000"
+}));
 const port = 3000;
 app.listen(port, () => {
 	console.log("Server has started!");
