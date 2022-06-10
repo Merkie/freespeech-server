@@ -9,7 +9,7 @@ const secret = require("./secret");
 // Schemas
 const User = require("./schema/User");
 const Layout = require("./schema/Layout");
-const Layout = require("./schema/Session");
+const Session = require("./schema/Session");
 
 // Express app
 const app = express();
