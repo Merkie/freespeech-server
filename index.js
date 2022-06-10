@@ -2,7 +2,7 @@
 const express = require("express");
 const https = require("https");
 const mongoose = require("mongoose");
-const crypto = require("crypto");
+const bcrypt = require("bcrypt");
 const secret = require("./secret");
 
 // Schemas
@@ -18,21 +18,9 @@ app.listen(port, () => {
 });
 
 // Hash Password
-function hashPassword(password) {
-	var salt = crypto.randomBytes(128).toString('base64');
-    var iterations = 10000;
-	console.log(password, salt, iterations);
-	
-    
-	
-    var hash = crypto.pbkdf2(password, salt, iterations, 64, 'sha512', (err) => console.log(err));
-	console.log(hash);
-
-    // return {
-    //     salt: salt,
-    //     hash: hash,
-    //     iterations: iterations
-    // };
+async function hashPassword(password) {
+	const salt = await bcrypt.genSalt(10);
+    return await bcrypt.hash(password, salt);
 }
 
 // Validate Password
@@ -45,7 +33,7 @@ app.post("/signup", async (req, res) => {
 	try {
 		const json = req.body;
 
-		console.log(hashPassword("asdf"));
+		console.log(await hashPassword("asdf"));
 
 		const layout = new Layout({
 			name: "My First Layout",
