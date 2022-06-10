@@ -25,7 +25,8 @@ function hashPassword(password) {
 	
     
 	
-    var hash = crypto.pbkdf2(password, salt, iterations, 64, 'sha512', (err) => console.log(err)).toString('base64');
+    var hash = crypto.pbkdf2(password, salt, iterations, 64, 'sha512', (err) => console.log(err));
+	console.log(hash);
 
     // return {
     //     salt: salt,
