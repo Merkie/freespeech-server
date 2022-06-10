@@ -14,7 +14,7 @@ const layoutSchema = new mongoose.Schema({
     icon: String,
     data: {
         type: Object,
-        default: {"Home":[]}
+        default: {"Home":[{"text":"Hello!"}]}
     },
     owner: {
         type: mongoose.SchemaTypes.ObjectId

@@ -125,11 +125,8 @@ app.post("/layout", async (req, res) => {
 		const session = await validateSession(json["session"]);
 		const layoutID = json["layout"];
 
-		console.log(session);
-
 		if (session) {
 			const layout = await Layout.findById(layoutID);
-			console.log(layout);
 			if(layout.public == false) {
 				if(layout.owner == session.owner) {
 					res.send({"success": true, "layout": layout});
@@ -156,9 +153,3 @@ mongoose.connect(secret.mongourl).then(() => {
 app.get("/", (req, res) => {
 	res.send("Hello World!");
 });
-
-async function run() {
-	console.log(new_layout);
-	console.log("\n");
-	console.log(new_user);
-}
