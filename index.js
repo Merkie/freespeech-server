@@ -58,6 +58,26 @@ app.post("/signup", async (req, res) => {
 	}
 });
 
+app.post("/login", async (req, res) => {
+	try {
+		const json = req.body;
+		const user = await User.findOne({email: json["email"]});
+		if (user) {
+			const valid = await validatePassword(user.password, json["password"]);
+			if (valid) {
+				res.send({"success": true, "user": user});
+			} else {
+				res.send({"success": false});
+			}
+		} else {
+			res.send({"success": false});
+		}
+	} catch (err) {
+		console.log(err);
+		res.status(500).send(err);
+	}
+});
+
 mongoose.connect(secret.mongourl).then(() => {
 	console.log("Connected to MongoDB!");
 });
