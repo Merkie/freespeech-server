@@ -21,7 +21,7 @@ app.post("/signup", async (req, res) => {
 	try {
 		const json = req.body;
 
-		const new_layout = new Layout({
+		const layout = new Layout({
 			name: "My First Layout",
 			icon: "https://uploads.dailydot.com/2018/10/olli-the-polite-cat.jpg?auto=compress&fit=scale&fm=pjpg&h=350&w=700",
 		});
@@ -32,11 +32,11 @@ app.post("/signup", async (req, res) => {
 			layouts: [new_layout._id],
 		});
 
-		new_layout.owner = user._id;
+		layout.owner = user._id;
 
-		await new_layout.save();
-		await new_user.save();
-		
+		await layout.save();
+		await user.save();
+
 		res.send({"success": true});
 	} catch (err) {
 		console.log(err);
