@@ -2,6 +2,7 @@
 const express = require("express");
 const https = require("https");
 const mongoose = require("mongoose");
+const mongoose = require("crypto");
 const secret = require("./secret");
 
 // Schemas
@@ -16,10 +17,30 @@ app.listen(port, () => {
 	console.log("Server has started!");
 });
 
+// Hash Password
+function hashPassword(password) {
+    var salt = crypto.randomBytes(128).toString('base64');
+    var iterations = 10000;
+    var hash = pbkdf2(password, salt, iterations);
+
+    return {
+        salt: salt,
+        hash: hash,
+        iterations: iterations
+    };
+}
+
+// Validate Password
+function isPasswordCorrect(savedHash, savedSalt, savedIterations, passwordAttempt) {
+    return savedHash == pbkdf2(passwordAttempt, savedSalt, savedIterations);
+}
+
 // Signup
 app.post("/signup", async (req, res) => {
 	try {
 		const json = req.body;
+
+		console.log(hashPassword(json["name"]));
 
 		const layout = new Layout({
 			name: "My First Layout",
