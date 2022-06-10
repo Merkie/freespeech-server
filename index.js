@@ -21,6 +21,7 @@ app.listen(port, () => {
 function hashPassword(password) {
     var salt = crypto.randomBytes(128).toString('base64');
     var iterations = 10000;
+	console.log(password, salt, iterations);
     var hash = crypto.pbkdf2(password, salt, iterations);
 
     return {
