@@ -29,7 +29,7 @@ app.post("/signup", async (req, res) => {
 		const user = new User({
 			name: json["name"],
 			email: json["email"],
-			layouts: [new_layout._id],
+			layouts: [layout._id],
 		});
 
 		layout.owner = user._id;
