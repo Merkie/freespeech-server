@@ -19,16 +19,19 @@ app.listen(port, () => {
 
 // Hash Password
 function hashPassword(password) {
-    var salt = crypto.randomBytes(128).toString('base64');
+	var salt = crypto.randomBytes(128).toString('base64');
     var iterations = 10000;
 	console.log(password, salt, iterations);
-    var hash = crypto.pbkdf2(password, salt, iterations);
+	
+    
+	
+    // var hash = crypto.pbkdf2(password, salt, iterations);
 
-    return {
-        salt: salt,
-        hash: hash,
-        iterations: iterations
-    };
+    // return {
+    //     salt: salt,
+    //     hash: hash,
+    //     iterations: iterations
+    // };
 }
 
 // Validate Password
