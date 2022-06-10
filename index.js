@@ -123,7 +123,9 @@ app.post("/layout", async (req, res) => {
 	try {
 		const json = req.body;
 		const session = await validateSession(json["session"]);
-		const layoutID = json["layoutID"];
+		const layoutID = json["layout"];
+
+		console.log(session);
 
 		if (session) {
 			const layout = await Layout.findById(layoutID);
