@@ -120,11 +120,29 @@ app.post("/session", async (req, res) => {
 });
 
 app.get("/layout", async (req, res) => {
-	;
-});
+	try {
+		const json = req.body;
+		const session = await validateSession(json["session"]);
+		const layoutID = json["layoutID"];
 
-app.get("/layout", async (req, res) => {
-	;
+		if (session) {
+			const layout = await Layout.findById(layoutID);
+			if(layout.public == false) {
+				if(layout.owner == session.owner) {
+					res.send({"success": true, "layout": layout});
+				} else {
+					res.send({"success": false});
+				}
+			} else {
+				res.send({"success": true, "layout": layout});
+			}
+		} else {
+			res.send({"success": false});
+		}
+	} catch (err) {
+		console.log(err);
+		res.status(500).send(err);
+	}
 });
 
 
