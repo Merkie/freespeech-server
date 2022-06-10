@@ -21,21 +21,21 @@ app.post("/signup", async (req, res) => {
 
 	console.log(json);
 
-	const new_layout = new Layout({
-		name: "My First Layout",
-		icon: "https://uploads.dailydot.com/2018/10/olli-the-polite-cat.jpg?auto=compress&fit=scale&fm=pjpg&h=350&w=700",
-	});
+	// const new_layout = new Layout({
+	// 	name: "My First Layout",
+	// 	icon: "https://uploads.dailydot.com/2018/10/olli-the-polite-cat.jpg?auto=compress&fit=scale&fm=pjpg&h=350&w=700",
+	// });
 
-	const user = new User({
-		name: json["name"],
-		email: json["email"],
-		layouts: [new_layout._id],
-	});
+	// const user = new User({
+	// 	name: json["name"],
+	// 	email: json["email"],
+	// 	layouts: [new_layout._id],
+	// });
 
-	new_layout.owner = user._id;
+	// new_layout.owner = user._id;
 
-	await new_layout.save();
-	await new_user.save();
+	// await new_layout.save();
+	// await new_user.save();
 });
 
 
