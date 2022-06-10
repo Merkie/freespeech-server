@@ -24,7 +24,7 @@ async function hashPassword(password) {
 }
 
 // Validate Password
-function validatePassword(savedPassword, password) {
+async function validatePassword(savedPassword, password) {
 	return await bcrypt.compare(password, savedPassword);
 }
 
