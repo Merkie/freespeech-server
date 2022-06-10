@@ -9,6 +9,7 @@ const secret = require("./secret");
 // Schemas
 const User = require("./schema/User");
 const Layout = require("./schema/Layout");
+const Layout = require("./schema/Session");
 
 // Express app
 const app = express();
@@ -30,6 +31,21 @@ async function hashPassword(password) {
 // Validate Password
 async function validatePassword(savedPassword, password) {
 	return await bcrypt.compare(password, savedPassword);
+}
+
+// New Session
+function createSessionString() {
+	return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+}
+
+// Validate Session
+async function validateSession(userSession) {
+	const session = await Session.findOne({key: userSession});
+	if (session) {
+		return session;
+	} else {
+		return null;
+	}
 }
 
 // Signup
@@ -69,7 +85,11 @@ app.post("/login", async (req, res) => {
 		if (user) {
 			const valid = await validatePassword(user.password, json["password"]);
 			if (valid) {
-				res.send({"success": true, "user": user});
+				const session = new Session({
+					owner: user._id,
+					key: createSessionString()
+				});
+				res.send({"success": true, "user": user, "session": session.key});
 			} else {
 				res.send({"success": false});
 			}
@@ -81,6 +101,31 @@ app.post("/login", async (req, res) => {
 		res.status(500).send(err);
 	}
 });
+
+app.post("/session", async (req, res) => {
+	try {
+		const json = req.body;
+		const session = await validateSession(json["session"]);
+
+		if (session) {
+			res.send({"success": true, "user": await User.findById(session.owner)});
+		} else {
+			res.send({"success": false});
+		}
+	} catch (err) {
+		console.log(err);
+		res.status(500).send(err);
+	}
+});
+
+app.get("/layout", async (req, res) => {
+	;
+});
+
+app.get("/layout", async (req, res) => {
+	;
+});
+
 
 mongoose.connect(secret.mongourl).then(() => {
 	console.log("Connected to MongoDB!");
