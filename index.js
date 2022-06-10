@@ -2,7 +2,7 @@
 const express = require("express");
 const https = require("https");
 const mongoose = require("mongoose");
-const mongoose = require("crypto");
+const crypto = require("crypto");
 const secret = require("./secret");
 
 // Schemas
