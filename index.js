@@ -14,7 +14,7 @@ const Layout = require("./schema/Layout");
 const app = express();
 app.use(express.json());
 app.use(cors({
-	origin: "http://159.223.200.254:3000"
+	origin: "http://159.223.200.254:3000/*"
 }));
 const port = 3000;
 app.listen(port, () => {
