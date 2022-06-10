@@ -129,6 +129,7 @@ app.post("/layout", async (req, res) => {
 
 		if (session) {
 			const layout = await Layout.findById(layoutID);
+			console.log(layout);
 			if(layout.public == false) {
 				if(layout.owner == session.owner) {
 					res.send({"success": true, "layout": layout});
