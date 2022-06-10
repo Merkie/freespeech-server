@@ -24,16 +24,15 @@ async function hashPassword(password) {
 }
 
 // Validate Password
-function isPasswordCorrect(savedHash, savedSalt, savedIterations, passwordAttempt) {
-    return savedHash == crypto.pbkdf2(passwordAttempt, savedSalt, savedIterations);
+function validatePassword(savedPassword, password) {
+	return await bcrypt.compare(password, savedPassword);
 }
 
 // Signup
 app.post("/signup", async (req, res) => {
 	try {
 		const json = req.body;
-
-		console.log(await hashPassword("asdf"));
+		const hashedPassword = await hashPassword(json["password"]);
 
 		const layout = new Layout({
 			name: "My First Layout",
@@ -42,8 +41,9 @@ app.post("/signup", async (req, res) => {
 
 		const user = new User({
 			name: json["name"],
+			password: hashedPassword,
 			email: json["email"],
-			layouts: [layout._id],
+			layouts: [layout._id]
 		});
 
 		layout.owner = user._id;

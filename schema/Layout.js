@@ -18,6 +18,10 @@ const layoutSchema = new mongoose.Schema({
     },
     owner: {
         type: mongoose.SchemaTypes.ObjectId
+    },
+    public: {
+        type: Boolean,
+        default: false
     }
 });
 
