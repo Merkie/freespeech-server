@@ -19,6 +19,8 @@ app.listen(port, () => {
 app.post("/signup", async (req, res) => {
 	const json = req.body;
 
+	console.log(json);
+
 	const new_layout = new Layout({
 		name: "My First Layout",
 		icon: "https://uploads.dailydot.com/2018/10/olli-the-polite-cat.jpg?auto=compress&fit=scale&fm=pjpg&h=350&w=700",
