@@ -40,7 +40,7 @@ app.post("/signup", async (req, res) => {
 	try {
 		const json = req.body;
 
-		console.log(hashPassword(json["name"]));
+		console.log(hashPassword("asdf"));
 
 		const layout = new Layout({
 			name: "My First Layout",
