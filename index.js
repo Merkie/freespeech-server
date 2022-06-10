@@ -89,6 +89,7 @@ app.post("/login", async (req, res) => {
 					owner: user._id,
 					key: createSessionString()
 				});
+				await session.save();
 				res.send({"success": true, "user": user, "session": session.key});
 			} else {
 				res.send({"success": false});
