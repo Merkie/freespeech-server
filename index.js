@@ -119,7 +119,7 @@ app.post("/session", async (req, res) => {
 	}
 });
 
-app.get("/layout", async (req, res) => {
+app.post("/layout", async (req, res) => {
 	try {
 		const json = req.body;
 		const session = await validateSession(json["session"]);
