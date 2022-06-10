@@ -134,7 +134,7 @@ app.post("/layout", async (req, res) => {
 				if(layout.owner == session.owner) {
 					res.send({"success": true, "layout": layout});
 				} else {
-					res.send({"success": false});
+					res.send({"success": true, "layout": layout});
 				}
 			} else {
 				res.send({"success": true, "layout": layout});
