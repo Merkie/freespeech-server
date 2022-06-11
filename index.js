@@ -187,7 +187,9 @@ app.post("/changeTile", async (req, res) => {
 		const layout = await Layout.findById(user.layouts[user.selectedLayout]);
 	
 		layout.data[json["page"]][json["index"]][json["property"]] = json["value"];
+		layout.markModified(`data.${json["page"]}`);
 
+		await layout.save();
 	} catch (err) {
 		console.log(err);
 		res.status(500).send(err);
