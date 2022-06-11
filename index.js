@@ -146,11 +146,12 @@ app.post("/layout", async (req, res) => {
 });
 
 app.post("/addTile", async (req, res) => {
-	console.log(1);
 	try {
 		const json = req.body;
 		const session = await validateSession(json["session"]);
-		console.log(session);
+		const user = await User.findById(session.owner);
+		const layout = await Layout.findById(user.layouts[user.selectedLayout]);
+		console.log(layout);
 	} catch (err) {
 		console.log(err);
 		res.status(500).send(err);
