@@ -151,7 +151,8 @@ app.post("/addTile", async (req, res) => {
 		const session = await validateSession(json["session"]);
 		const user = await User.findById(session.owner);
 		const layout = await Layout.findById(user.layouts[user.selectedLayout]);
-		console.log(layout);
+		layout.tiles.push({"text": "New Tile"});
+		await layout.save();
 	} catch (err) {
 		console.log(err);
 		res.status(500).send(err);
