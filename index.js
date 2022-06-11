@@ -162,6 +162,38 @@ app.post("/addTile", async (req, res) => {
 	}
 });
 
+app.post("/removeTile", async (req, res) => {
+	try {
+		const json = req.body;
+		const session = await validateSession(json["session"]);
+		const user = await User.findById(session.owner);
+		const layout = await Layout.findById(user.layouts[user.selectedLayout]);
+
+		layout.data[json["page"]] = layout.data[json["page"]].splice(json["index"], 1);
+		layout.markModified(`data.${json["page"]}`);
+
+		await layout.save();
+	} catch (err) {
+		console.log(err);
+		res.status(500).send(err);
+	}
+});
+
+app.post("/changeTile", async (req, res) => {
+	try {
+		const json = req.body;
+		const session = await validateSession(json["session"]);
+		const user = await User.findById(session.owner);
+		const layout = await Layout.findById(user.layouts[user.selectedLayout]);
+	
+		layout.data[json["page"]][json["index"]][json["property"]] = json["value"];
+
+	} catch (err) {
+		console.log(err);
+		res.status(500).send(err);
+	}
+});
+
 
 mongoose.connect(secret.mongourl).then(() => {
 	console.log("Connected to MongoDB!");
