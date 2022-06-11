@@ -146,6 +146,7 @@ app.post("/layout", async (req, res) => {
 });
 
 app.post("/addTile", async (req, res) => {
+	console.log(1);
 	try {
 		const json = req.body;
 		const session = await validateSession(json["session"]);
