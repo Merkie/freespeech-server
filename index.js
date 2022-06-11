@@ -145,6 +145,17 @@ app.post("/layout", async (req, res) => {
 	}
 });
 
+app.post("/addTile", async (req, res) => {
+	try {
+		const json = req.body;
+		const session = await validateSession(json["session"]);
+		console.log(session);
+	} catch (err) {
+		console.log(err);
+		res.status(500).send(err);
+	}
+});
+
 
 mongoose.connect(secret.mongourl).then(() => {
 	console.log("Connected to MongoDB!");
