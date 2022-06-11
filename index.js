@@ -152,10 +152,10 @@ app.post("/addTile", async (req, res) => {
 		const user = await User.findById(session.owner);
 		const layout = await Layout.findById(user.layouts[user.selectedLayout]);
 		
-		console.log(layout.data[json["page"]]);
 		layout.data[json["page"]] = [...layout.data[json["page"]], {"text": "New Tile"}]
 		await layout.save();
-		console.log(layout.data);
+		console.log(layout._id);
+		console.log(layout.data[json["page"]]);
 
 	} catch (err) {
 		console.log(err);
