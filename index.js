@@ -153,8 +153,8 @@ app.post("/addTile", async (req, res) => {
 		const layout = await Layout.findById(user.layouts[user.selectedLayout]);
 		
 		layout.data[json["page"]] = [...layout.data[json["page"]], {"text": "New Tile"}]
-		layout.markModified("data");
-		
+		layout.markModified(`data.${json["page"]}`);
+
 		await layout.save();
 	} catch (err) {
 		console.log(err);
