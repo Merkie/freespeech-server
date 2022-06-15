@@ -4,7 +4,8 @@ const https = require("https");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const cors = require("cors");
-const secret = require("./secret");
+
+require("dotenv").config();
 
 // Schemas
 const User = require("./schema/User");
@@ -14,9 +15,11 @@ const Session = require("./schema/Session");
 // Express app
 const app = express();
 app.use(express.json());
-app.use(cors({
-	origin: "*"
-}));
+app.use(
+	cors({
+		origin: "*",
+	})
+);
 const port = 3000;
 app.listen(port, () => {
 	console.log("Server has started!");
@@ -25,7 +28,7 @@ app.listen(port, () => {
 // Hash Password
 async function hashPassword(password) {
 	const salt = await bcrypt.genSalt(10);
-    return await bcrypt.hash(password, salt);
+	return await bcrypt.hash(password, salt);
 }
 
 // Validate Password
@@ -40,7 +43,7 @@ function createSessionString() {
 
 // Validate Session
 async function validateSession(userSession) {
-	const session = await Session.findOne({key: userSession});
+	const session = await Session.findOne({ key: userSession });
 	if (session) {
 		return session;
 	} else {
@@ -63,7 +66,7 @@ app.post("/signup", async (req, res) => {
 			name: json["name"],
 			password: hashedPassword,
 			email: json["email"],
-			layouts: [layout._id]
+			layouts: [layout._id],
 		});
 
 		layout.owner = user._id;
@@ -71,7 +74,7 @@ app.post("/signup", async (req, res) => {
 		await layout.save();
 		await user.save();
 
-		res.send({"success": true});
+		res.send({ success: true });
 	} catch (err) {
 		console.log(err);
 		res.status(500).send(err);
@@ -81,21 +84,21 @@ app.post("/signup", async (req, res) => {
 app.post("/login", async (req, res) => {
 	try {
 		const json = req.body;
-		const user = await User.findOne({email: json["email"]});
+		const user = await User.findOne({ email: json["email"] });
 		if (user) {
 			const valid = await validatePassword(user.password, json["password"]);
 			if (valid) {
 				const session = new Session({
 					owner: user._id,
-					key: createSessionString()
+					key: createSessionString(),
 				});
 				await session.save();
-				res.send({"success": true, "user": user, "session": session.key});
+				res.send({ success: true, user: user, session: session.key });
 			} else {
-				res.send({"success": false});
+				res.send({ success: false });
 			}
 		} else {
-			res.send({"success": false});
+			res.send({ success: false });
 		}
 	} catch (err) {
 		console.log(err);
@@ -109,9 +112,9 @@ app.post("/session", async (req, res) => {
 		const session = await validateSession(json["session"]);
 
 		if (session) {
-			res.send({"success": true, "user": await User.findById(session.owner)});
+			res.send({ success: true, user: await User.findById(session.owner) });
 		} else {
-			res.send({"success": false});
+			res.send({ success: false });
 		}
 	} catch (err) {
 		console.log(err);
@@ -127,17 +130,17 @@ app.post("/layout", async (req, res) => {
 
 		if (session) {
 			const layout = await Layout.findById(layoutID);
-			if(layout.public == false) {
-				if(layout.owner == session.owner) {
-					res.send({"success": true, "layout": layout});
+			if (layout.public == false) {
+				if (layout.owner == session.owner) {
+					res.send({ success: true, layout: layout });
 				} else {
-					res.send({"success": true, "layout": layout});
+					res.send({ success: true, layout: layout });
 				}
 			} else {
-				res.send({"success": true, "layout": layout});
+				res.send({ success: true, layout: layout });
 			}
 		} else {
-			res.send({"success": false});
+			res.send({ success: false });
 		}
 	} catch (err) {
 		console.log(err);
@@ -151,8 +154,8 @@ app.post("/addTile", async (req, res) => {
 		const session = await validateSession(json["session"]);
 		const user = await User.findById(session.owner);
 		const layout = await Layout.findById(user.layouts[user.selectedLayout]);
-		
-		layout.data[json["page"]] = [...layout.data[json["page"]], {"text": "New Tile"}]
+
+		layout.data[json["page"]] = [...layout.data[json["page"]], { text: "New Tile" }];
 		layout.markModified(`data.${json["page"]}`);
 
 		await layout.save();
@@ -185,7 +188,7 @@ app.post("/changeTile", async (req, res) => {
 		const session = await validateSession(json["session"]);
 		const user = await User.findById(session.owner);
 		const layout = await Layout.findById(user.layouts[user.selectedLayout]);
-	
+
 		layout.data[json["page"]][json["index"]][json["property"]] = json["value"];
 		layout.markModified(`data.${json["page"]}`);
 
@@ -196,10 +199,13 @@ app.post("/changeTile", async (req, res) => {
 	}
 });
 
-
-mongoose.connect(secret.mongourl).then(() => {
-	console.log("Connected to MongoDB!");
-});
+mongoose
+	.connect(
+		`mongodb://${process.env.MONGO_ROOT_USERNAME}:${process.env.MONGO_ROOT_PASSWORD}@${process.env.MONGODB_HOST}:27017/`
+	)
+	.then(() => {
+		console.log("Connected to MongoDB!");
+	});
 
 app.get("/", (req, res) => {
 	res.send("Hello World!");
